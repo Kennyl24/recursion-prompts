@@ -65,6 +65,11 @@ var sumBelow = function(n) {
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+	var result = [];
+	if( x > y){
+		return result;
+	} 
+	return result.push(x+1).concat(range(x+1,y));
 };
 
 // 7. Compute the exponent of a number.
@@ -80,7 +85,7 @@ var exponent = function(base, exp) {
 	} if (exp === -1){
 		return 1/base;
 	} if (exp < 0){
-	  return 1/base * exponent(base, exp+1);
+	  return 1 / exponent(base, -exp);
 	}
 	return base * exponent(base,exp-1);
 };
@@ -90,6 +95,14 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+	var result = n / 2;
+	if(result < 2){
+		return false;
+	} else if(result === 2){
+		return true;
+	} else {
+		return powerOfTwo(result)
+	}
 };
 
 // 9. Write a function that reverses a string.
@@ -103,11 +116,13 @@ var reverse = function(string) {
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
-	if(string.toLowerCase() === reverse(string.toLowerCase())){
+	string = string.toLowerCase().trim();
+	if(string.length === 0 || string.length === 1){
 		return true;
-	} else {
-		return false;
+	} else if (string[0] === string[string.length-1]){
+	return palindrome(string.slice(1, string.length-1));
 	}
+		return false;
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
