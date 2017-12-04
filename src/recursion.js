@@ -308,6 +308,15 @@ var replaceKeysInObj = function(obj, oldKey, newKey) {
 // fibonacci(5); // [0,1,1,2,3,5]
 // Note: The 0 is not counted.
 var fibonacci = function(n) {
+ if (n === 0 || n < 0){
+    return null;
+  }
+   if (n===1){ 
+    return [0, 1];
+   }
+    var result = fibonacci(n - 1);
+    result.push(result[result.length - 1] + result[result.length - 2]);
+        return result;
 };
 
 // 26. Return the Fibonacci number located at index n of the Fibonacci sequence.
@@ -316,7 +325,14 @@ var fibonacci = function(n) {
 // nthFibo(7); // 13
 // nthFibo(3); // 2
 var nthFibo = function(n) {
-};
+   if (n < 0){
+     return null;
+   }	
+   if(n<=1){
+    return n;
+    }
+    return nthFibo(n-1) + nthFibo(n-2);  
+  };
 
 // 27. Given an array of words, return a new array containing each word capitalized.
 // var words = ['i', 'am', 'learning', 'recursion'];
@@ -368,7 +384,16 @@ var flatten = function(array) {
 // 31. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {p:1, o:2, t:2, a:1}
 var letterTally = function(str, obj) {
-};
+  if(str.length===0){
+    return obj;
+  }
+  if(Object.hasOwnProperty(str[0])){
+    obj[str[0]]++;
+  }else{
+    obj[str[0]] = 1;
+  }
+  return letterTally(str.slice(1),obj)
+}
 
 // 32. Eliminate consecutive duplicates in a list. If the list contains repeated
 // elements they should be replaced with a single copy of the element. The order of the
