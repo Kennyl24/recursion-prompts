@@ -250,7 +250,9 @@ var fizzBuzz = function(n) {
   var val = n;
 
   // base case
-  if (n === 0) { return results; }
+  if (n === 0) { 
+  return results; 
+}
 
   // recursive cases
   if (n % 3 === 0 && n % 5 !== 0) { val = 'Fizz'; } 
@@ -288,6 +290,14 @@ var rMap = function(array, callback) {
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
 var countKeysInObj = function(obj, key) {
+	var count = 0;
+	for (var prop in obj){
+	  console.log(obj[prop]);
+		if (prop === key){
+			count+=1;
+		}
+	}
+		return count;
 };
 
 // 23. Write a function that counts the number of times a value occurs in an object.
@@ -311,7 +321,7 @@ var fibonacci = function(n) {
  if (n === 0 || n < 0){
     return null;
   }
-   if (n===1){ 
+   if (n === 1){ 
     return [0, 1];
    }
     var result = fibonacci(n - 1);
@@ -328,7 +338,7 @@ var nthFibo = function(n) {
    if (n < 0){
      return null;
    }	
-   if(n<=1){
+   if(n <= 1){
     return n;
     }
     return nthFibo(n-1) + nthFibo(n-2);  
@@ -365,6 +375,7 @@ var capitalizeFirst = function(array) {
 // };
 // nestedEvenSum(obj1); // 10
 var nestedEvenSum = function(obj) {
+	
 };
 
 // 30. Flatten an array containing nested arrays.
@@ -373,27 +384,29 @@ var flatten = function(array) {
 	var result = [];
 	if (array.length === 0){
 		return array;
-	} if (typeof array[0] === 'number'){
-		result.push(array[0]);
-	}if (Array.isArray(array[0])){
-		result.push(flatten(array[0]));
 	} 
-	return flatten(array[0]);
+	for (var i = 0; i < array.length; i++){
+	  if (Array.isArray(array[i])){
+	    result = result.concat(flatten(array[i]));
+	  } else{
+	    result.push(array[i])
+	  }
+	}
+	  return result;
 };
 
 // 31. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {p:1, o:2, t:2, a:1}
-var letterTally = function(str, obj) {
-  if(str.length===0){
-    return obj;
-  }
-  if(Object.hasOwnProperty(str[0])){
-    obj[str[0]]++;
-  }else{
-    obj[str[0]] = 1;
-  }
-  return letterTally(str.slice(1),obj)
-}
+var letterTally = function(str, obj = {}) {
+	if (str.length === 0){
+	  return obj;
+	} if(str[0] in obj){
+	  obj[str[0]]++;
+	} else {
+  	obj[str[0]] =1; 
+	}
+	  return letterTally(str.slice(1), obj);
+};
 
 // 32. Eliminate consecutive duplicates in a list. If the list contains repeated
 // elements they should be replaced with a single copy of the element. The order of the
@@ -401,28 +414,37 @@ var letterTally = function(str, obj) {
 // compress([1,2,2,3,4,4,5,5,5]) // [1,2,3,4,5]
 // compress([1,2,2,3,4,4,2,5,5,5,4,4]) // [1,2,3,4,2,5,4]
 var compress = function(list) {
-	var result = [];
-	if (list.length === 0){
-		return list;
-	} if (list[0] === list[1]){
-		result.push(list[0]);
-		return result.concat(compress(list.slice(2)));
-	} if (list[0] !== list[1]){
-		result.push(list[0], list[1]);
-		return result.concat(compress(list.slice(2)));
-	}
+	
 };
 
 // 33. Augument every element in a list with a new value where each element is an array
 // itself.
 // augmentElements([[],[3],[7]], 5); // [[5],[3,5],[7,5]]
+//augmentElements([[],[3],[7]], 5); // [[5],[3,5],[7,5]]
 var augmentElements = function(array, aug) {
+  var result = [];
+  if (array.length === 0){
+    return result;
+  } 
+    if(Array.isArray(array[0])){
+      array[0].push(aug);
+      result.push(array[0]);
+    }
+    return result.concat(augmentElements(array.slice(1), aug));
 };
 
 // 34. Reduce a series of zeroes to a single 0.
 // minimizeZeroes([2,0,0,0,1,4]) // [2,0,1,4]
 // minimizeZeroes([2,0,0,0,1,0,0,4]) // [2,0,1,0,4]
 var minimizeZeroes = function(array) {
+	if (array.length === 0) { 
+		return array; 
+	};
+    if(minimizeZeroes(array.slice(1))[0] === 0 && array[0] === 0) {
+        return minimizeZeroes(array.slice(1));
+    } else {
+        return [array[0]].concat(minimizeZeroes(array.slice(1)));
+    }
 };
 
 // 35. Alternate the numbers in an array between positive and negative regardless of
@@ -442,20 +464,19 @@ var alternateSign = function(array) {
 
 // 36. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
-// numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
 var numToText = function(str) {
+  console.log(parseInt(str.split(' ')[0]))
 	var result = [];
 	var numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 	if (str.length === 0){
 		return str;
-	} if (typeof str.split(' ')[0] === 'number'){
-		result.push()
-	} if (typeof str.split(' ')[0] === 'string'){
+	} if (!isNaN(parseInt(str.split(' ')[0]))){
+		result.push(numbers[str.split(' ')[0]-1])
+	} else {
 		result.push(str.split(' ')[0]);
 	}
-		return result.concat(numToText(str.slice(1))).join(' ');
+		return result.concat(numToText(str.split(' ').slice(1).join(' '))).join(' ').trim();
 };
-
 
 // *** EXTRA CREDIT ***
 
