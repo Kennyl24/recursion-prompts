@@ -35,7 +35,7 @@ var arraySum = function(array) {
         return array;
     }
     else if (Array.isArray(array)){
-        for (var i = 0; i < array.length; ++i){
+        for (var i = 0; i < array.length; i++){
             sum += arraySum(array[i]);
         }
     }
@@ -142,15 +142,22 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
  var modulo = function(x, y) {   
-  if (y === 0) { return NaN; }
-
+  if (y === 0) { 
+  	return NaN; 
+  }
   if (x < 0 && y < 0) {
-    if (x > y) { return x; }
+    if (x > y) { 
+    	return x; 
+    }
   } else if ((x < 0 && y > 0) || (x > 0 && y < 0)) {
-    if (-x < y) { return x; }
+    if (-x < y) { 
+    return x; 
+    }
     return modulo(x + y, y);
   } else {
-    if (x < y) { return x; }
+    if (x < y) { 
+    	return x; 
+    }
   }
   return modulo(x - y, y);
 };
@@ -169,10 +176,18 @@ var multiply = function(x, y) {
 // 13. Write a function that divides two numbers without using the / operator or
 // Math methods.
 var divide = function(x, y) {
-  if (y === 0) { return NaN; }
-  if (x === 0) { return 0; }
-  if (x < 0 && y > 0 && -x < y || x < -y) { return 0; }
-  if (x > 0 && y > 0 && x < y) { return 0; }
+  if (y === 0) { 
+  	return NaN; 
+  }
+  if (x === 0) { 
+  	return 0; 
+  }
+  if (x < 0 && y > 0 && -x < y || x < -y) { 
+  	return 0; 
+  }
+  if (x > 0 && y > 0 && x < y) { 
+  	return 0;
+  	 }
   if (x > 0 && y > 0) {
     return 1 + divide(x - y, y);
   } else {
@@ -255,9 +270,15 @@ var fizzBuzz = function(n) {
 }
 
   // recursive cases
-  if (n % 3 === 0 && n % 5 !== 0) { val = 'Fizz'; } 
-  if (n % 3 !== 0 && n % 5 === 0) { val = 'Buzz'; }
-  if (n % 3 === 0 && n % 5 === 0) { val = 'FizzBuzz'; }
+  if (n % 3 === 0 && n % 5 !== 0) { 
+  	val = 'Fizz'; 
+  } 
+  if (n % 3 !== 0 && n % 5 === 0) { 
+  	val = 'Buzz'; 
+  }
+  if (n % 3 === 0 && n % 5 === 0) { 
+  	val = 'FizzBuzz'; 
+  }
   results.push(val.toString());
 
   return fizzBuzz(n - 1).concat(results);
@@ -292,9 +313,10 @@ var rMap = function(array, callback) {
 var countKeysInObj = function(obj, key) {
 	var count = 0;
 	for (var prop in obj){
-	  console.log(obj[prop]);
 		if (prop === key){
-			count+=1;
+			count++;
+		} else if (typeof obj[prop] === 'object'){
+		  count+= countKeysInObj(obj[prop], key);
 		}
 	}
 		return count;
@@ -305,11 +327,32 @@ var countKeysInObj = function(obj, key) {
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
 var countValuesInObj = function(obj, value) {
+	var count = 0; 
+	for (var key in obj){
+	  if (obj[key] === value){
+	    count++;
+	  } else {
+	    if (typeof obj[key] === 'object'){
+	      count += countValuesInObj(obj[key], value);
+	    }
+	  }
+	}
+	  return count;
 };
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, oldKey, newKey) {
+  for ( var key in obj){
+    var value = obj[oldKey];
+    if (key === oldKey){
+      obj[newKey] = value;
+      delete obj[oldKey];
+    } else if (typeof obj[key] === 'object'){
+        replaceKeysInObj(obj[key], oldKey, newKey);
+    }
+  }
+    return obj;
 };
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
@@ -375,7 +418,15 @@ var capitalizeFirst = function(array) {
 // };
 // nestedEvenSum(obj1); // 10
 var nestedEvenSum = function(obj) {
-	
+	var sum = 0;
+	for (var key in obj){
+		if (obj[key] % 2 === 0){
+			sum+= obj[key];
+		} if ( typeof obj[key] === 'object'){
+			sum+= nestedEvenSum(obj[key]);
+		}
+	}
+	return sum;
 };
 
 // 30. Flatten an array containing nested arrays.
@@ -414,7 +465,14 @@ var letterTally = function(str, obj = {}) {
 // compress([1,2,2,3,4,4,5,5,5]) // [1,2,3,4,5]
 // compress([1,2,2,3,4,4,2,5,5,5,4,4]) // [1,2,3,4,2,5,4]
 var compress = function(list) {
-	
+	if (list.length === 0) { 
+		return list; 
+	};
+    if(compress(list.slice(1))[0] === list[0]) {
+        return compress(list.slice(1));
+    } else {
+        return [list[0]].concat(compress(list.slice(1)));
+    }
 };
 
 // 33. Augument every element in a list with a new value where each element is an array
